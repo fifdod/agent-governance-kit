@@ -31,10 +31,18 @@ All proprietary references were removed:
 ## New Implementation
 
 The v0.1 public implementation is an independent codebase:
-- New Git repository with zero history relationship to source
-- All code written specifically for this project
-- No source files copied verbatim without sanitization
+
+- **New Git repository** with zero history relationship to private source
+- **COPY_AND_SANITIZE** (2 modules: `contracts.py`, `runtime_utils.py`):
+  Adapted from project-owned deterministic utility code; all private
+  identifiers, paths, and business logic removed
+- **REIMPLEMENT_FROM_BEHAVIOR** (8 modules): Rewritten from scratch
+  preserving verified governance behaviors; no source code copied
+- **WRITE_NEW** (3 modules: agent adapters, demo, skill): Created
+  without reference to private source
+- No third-party code included
 - No private runtime evidence published
+- All code originated from the same project owner
 
 ## Provenance
 

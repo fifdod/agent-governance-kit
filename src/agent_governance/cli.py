@@ -57,7 +57,13 @@ def _print_obj(obj: dict[str, Any]) -> None:
 
 def _validate_task(args: argparse.Namespace) -> int:
     """Validate a TaskSpec JSON file."""
-    spec = _load_json(args.path)
+    data = _load_json(args.path)
+
+    # Auto-detect scenario wrapper: {"scenario": ..., "task_spec": {...}}
+    if isinstance(data, dict) and "task_spec" in data and "scenario" in data:
+        spec = data["task_spec"]
+    else:
+        spec = data
 
     # Structural validation
     scopes, errors = validate_task_spec_structure(spec)
@@ -94,9 +100,17 @@ def _validate_task(args: argparse.Namespace) -> int:
     return EXIT_PASS
 
 
+def _extract_task_spec(data: dict[str, Any]) -> dict[str, Any]:
+    """Extract TaskSpec from a scenario wrapper or return as-is."""
+    if isinstance(data, dict) and "task_spec" in data and "scenario" in data:
+        return data["task_spec"]
+    return data
+
+
 def _validate_policy(args: argparse.Namespace) -> int:
     """Validate a TaskSpec against a policy file."""
-    spec = _load_json(args.task)
+    data = _load_json(args.task)
+    spec = _extract_task_spec(data)
     policy = StaticPolicy.load(args.policy)
     result = policy.validate_task_spec(spec)
     _print_obj(result.to_dict())
@@ -105,7 +119,8 @@ def _validate_policy(args: argparse.Namespace) -> int:
 
 def _validate_events(args: argparse.Namespace) -> int:
     """Validate an event stream against a TaskSpec."""
-    spec = _load_json(args.task)
+    data = _load_json(args.task)
+    spec = _extract_task_spec(data)
     events = _load_json(args.events)
     try:
         task_spec = build_task_spec(spec)
@@ -139,7 +154,8 @@ def _validate_events(args: argparse.Namespace) -> int:
 
 def _validate_patch(args: argparse.Namespace) -> int:
     """Validate a patch file against a TaskSpec."""
-    spec = _load_json(args.task)
+    data = _load_json(args.task)
+    spec = _extract_task_spec(data)
     patch_text = Path(args.patch).read_text(encoding="utf-8")
     try:
         task_spec = build_task_spec(spec)
