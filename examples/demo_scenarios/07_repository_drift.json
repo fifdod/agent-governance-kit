@@ -1,0 +1,31 @@
+{
+  "scenario": "07_repository_drift",
+  "description": "Protected source repository has unexpected tracked changes after agent execution.",
+  "expected_result": "INTEGRITY_FAILURE",
+  "before_snapshot": {
+    "branch": "main",
+    "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "tracked_files": ["src/calculator.py", "tests/test_calculator.py", "README.md"],
+    "untracked_files": [],
+    "ignored_files": [],
+    "protected_hashes": {
+      "tests/test_calculator.py": "abc123hash",
+      "README.md": "def456hash"
+    },
+    "git_status_raw": ""
+  },
+  "after_snapshot": {
+    "branch": "main",
+    "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "tracked_files": ["src/calculator.py", "README.md"],
+    "untracked_files": [],
+    "ignored_files": [],
+    "protected_hashes": {
+      "tests/test_calculator.py": "abc123hash",
+      "README.md": "def456hash"
+    },
+    "git_status_raw": ""
+  },
+  "volatile_paths": [],
+  "note": "tests/test_calculator.py disappeared from tracked files — integrity failure."
+}

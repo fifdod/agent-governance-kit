@@ -1,0 +1,61 @@
+{
+  "policy_version": "0.1.0",
+  "description": "Default fail-closed governance policy for autonomous coding agents",
+  "immutable": true,
+
+  "global_forbidden_path_patterns": [
+    ".env",
+    "*.pem",
+    "*.key",
+    "**/credentials*",
+    "**/secrets/**",
+    ".git/**",
+    ".claude/settings.local.json"
+  ],
+
+  "global_forbidden_command_patterns": [
+    "rm -rf /",
+    "DROP TABLE",
+    "git push --force",
+    "git reset --hard",
+    "chmod 777"
+  ],
+
+  "required_task_modes": {
+    "execution_mode": "sequential"
+  },
+
+  "limits": {
+    "max_execution_minutes": 120,
+    "max_agent_turns": 100,
+    "max_rework_cycles": 5
+  },
+
+  "defaults": {
+    "database": "READ_ONLY",
+    "scheduler": "READ_ONLY",
+    "trading": "PROHIBITED"
+  },
+
+  "forbidden_operations": [
+    "GIT_RESET",
+    "GIT_FORCE_PUSH",
+    "FILE_DELETE_OUTSIDE_SCOPE",
+    "COMMAND_OUTSIDE_ALLOWLIST"
+  ],
+
+  "human_gate_conditions": [
+    "UNRESTRICTED_NETWORK_ACCESS",
+    "PRODUCTION_DEPLOYMENT",
+    "POLICY_WIDENING",
+    "DATABASE_SCHEMA_MIGRATION",
+    "DESTRUCTIVE_OPERATION",
+    "UNREVIEWED_BASE_COMMIT"
+  ],
+
+  "executor_capabilities": {
+    "allowed_tools": ["Read", "Glob", "Grep", "Write", "Edit", "StructuredOutput"],
+    "forbidden_tools": ["Bash", "Shell", "PowerShell", "Cmd", "WebSearch", "WebFetch", "Browser"],
+    "network": "NONE"
+  }
+}

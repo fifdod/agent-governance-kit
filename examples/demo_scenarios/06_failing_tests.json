@@ -1,0 +1,23 @@
+{
+  "scenario": "06_failing_tests",
+  "description": "Patch scope is valid but the actual fix still has a bug causing tests to fail.",
+  "expected_result": "FAIL",
+  "task_spec": {
+    "task_spec_version": 2,
+    "task_id": "demo-06",
+    "task_type": "bug_fix",
+    "base_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "read_paths": ["src/", "tests/"],
+    "write_paths": ["src/calculator.py"],
+    "immutable_read_paths": [],
+    "forbidden_paths": ["protected/"],
+    "required_tests": ["python -m pytest tests/ -v"],
+    "max_execution_minutes": 30,
+    "max_agent_turns": 50,
+    "max_rework_cycles": 3,
+    "execution_mode": "sequential"
+  },
+  "patch": "diff --git a/src/calculator.py b/src/calculator.py\nindex abc1234..def5678 100644\n--- a/src/calculator.py\n+++ b/src/calculator.py\n@@ -12,3 +12,4 @@ def divide(a, b):\n-    return a / b\n+    # INCORRECT FIX: just returns 0 instead of raising\n+    return 0\n",
+  "expected_files": ["src/calculator.py"],
+  "note": "This patch fixes the ZeroDivisionError but breaks the divide tests since divide(6,2) should return 3 not 0."
+}

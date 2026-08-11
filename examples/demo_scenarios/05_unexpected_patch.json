@@ -1,0 +1,22 @@
+{
+  "scenario": "05_unexpected_patch",
+  "description": "Patch modifies an extra file (README.md) not in the expected files list.",
+  "expected_result": "FAIL",
+  "task_spec": {
+    "task_spec_version": 2,
+    "task_id": "demo-05",
+    "task_type": "bug_fix",
+    "base_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "read_paths": ["src/", "tests/"],
+    "write_paths": ["src/calculator.py"],
+    "immutable_read_paths": [],
+    "forbidden_paths": ["protected/"],
+    "required_tests": [],
+    "max_execution_minutes": 30,
+    "max_agent_turns": 50,
+    "max_rework_cycles": 3,
+    "execution_mode": "sequential"
+  },
+  "patch": "diff --git a/src/calculator.py b/src/calculator.py\nindex abc1234..def5678 100644\n--- a/src/calculator.py\n+++ b/src/calculator.py\n@@ -12,3 +12,5 @@ def divide(a, b):\n-    return a / b\n+    if b == 0:\n+        raise ValueError()\n+    return a / b\ndiff --git a/README.md b/README.md\nindex abc1234..def5678 100644\n--- a/README.md\n+++ b/README.md\n@@ -1 +1 @@\n-# Calculator\n+# Calculator (modified)\n",
+  "expected_files": ["src/calculator.py"]
+}

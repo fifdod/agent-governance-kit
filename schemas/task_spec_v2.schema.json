@@ -1,0 +1,105 @@
+{
+  "type": "object",
+  "description": "TaskSpec v2 — typed task specification with four-category path semantics",
+  "required": [
+    "task_spec_version",
+    "task_id",
+    "task_type",
+    "base_commit",
+    "read_paths",
+    "write_paths"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "task_spec_version": {
+      "type": "integer",
+      "enum": [2],
+      "description": "Must be 2 for TaskSpec v2"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique task identifier"
+    },
+    "task_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Task category (e.g. 'bug_fix', 'feature', 'refactor')"
+    },
+    "base_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "40-character hex SHA of the base commit"
+    },
+    "read_paths": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Repository-relative paths the agent may read"
+    },
+    "write_paths": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Repository-relative paths the agent may write (must be subset of read_paths)"
+    },
+    "immutable_read_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Readable but never writable paths"
+    },
+    "forbidden_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Paths that block both read and write access"
+    },
+    "allowed_commands": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Commands the agent may execute"
+    },
+    "forbidden_commands": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Commands the agent must not execute"
+    },
+    "required_tests": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Test commands that must pass"
+    },
+    "expected_outputs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Expected output artifacts"
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Required evidence artifacts"
+    },
+    "max_execution_minutes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 480,
+      "description": "Maximum execution time in minutes"
+    },
+    "max_agent_turns": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 500,
+      "description": "Maximum agent conversation turns"
+    },
+    "max_rework_cycles": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Maximum rework cycles"
+    },
+    "execution_mode": {
+      "type": "string",
+      "enum": ["sequential"],
+      "description": "Execution mode — must be 'sequential' for now"
+    }
+  }
+}

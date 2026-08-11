@@ -1,0 +1,44 @@
+{
+  "scenario": "01_valid_fix",
+  "description": "Agent fixes the divide-by-zero bug in calculator.py. All paths are allowed.",
+  "expected_result": "PASS",
+  "task_spec": {
+    "task_spec_version": 2,
+    "task_id": "demo-01",
+    "task_type": "bug_fix",
+    "base_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "read_paths": ["src/", "tests/"],
+    "write_paths": ["src/calculator.py"],
+    "immutable_read_paths": ["tests/"],
+    "forbidden_paths": ["protected/"],
+    "required_tests": ["python -m pytest tests/ -v"],
+    "max_execution_minutes": 30,
+    "max_agent_turns": 50,
+    "max_rework_cycles": 3,
+    "execution_mode": "sequential"
+  },
+  "patch": "diff --git a/src/calculator.py b/src/calculator.py\nindex abc1234..def5678 100644\n--- a/src/calculator.py\n+++ b/src/calculator.py\n@@ -12,5 +12,7 @@ def multiply(a: float, b: float) -> float:\n \n \n def divide(a: float, b: float) -> float:\n-    return a / b\n+    if b == 0:\n+        raise ValueError('Cannot divide by zero')\n+    return a / b\n",
+  "events": [
+    {
+      "type": "assistant",
+      "message": {
+        "type": "message", "role": "assistant",
+        "content": [{"type": "tool_use", "name": "Read", "id": "c1", "input": {"file_path": "src/calculator.py"}}]
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "type": "message", "role": "assistant",
+        "content": [{"type": "tool_use", "name": "Edit", "id": "c2", "input": {"file_path": "src/calculator.py", "old_string": "return a / b", "new_string": "if b == 0:\n        raise ValueError('Cannot divide by zero')\n    return a / b"}}]
+      }
+    },
+    {
+      "type": "assistant",
+      "message": {
+        "type": "message", "role": "assistant",
+        "content": [{"type": "tool_use", "name": "StructuredOutput", "id": "c3", "input": {"files_created": [], "files_modified": ["src/calculator.py"], "files_deleted": [], "commands_executed": [], "summary": "Fixed divide-by-zero bug"}}]
+      }
+    }
+  ]
+}

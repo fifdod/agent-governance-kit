@@ -1,0 +1,5 @@
+{
+  "api_endpoint": "https://api.internal.example.com",
+  "rate_limit": 100,
+  "secret_key_placeholder": "this-is-a-demo-protected-file-do-not-expose"
+}
